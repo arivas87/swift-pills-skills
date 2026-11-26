@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "swift-pills",
+  "description": "Skills de Swift, SwiftUI y plataformas Apple generadas a partir de los artículos de Swift Pills (swiftpills.dev).",
+  "owner": {
+    "name": "Swift Pills",
+    "url": "https://swiftpills.dev"
+  },
+  "plugins": [
+    {
+      "name": "swift-pills",
+      "source": "./plugins/swift-pills",
+      "description": "Skills de Swift, SwiftUI, concurrencia, SwiftData y plataformas Apple basadas en los artículos de Swift Pills.",
+      "category": "development",
+      "tags": ["swift", "swiftui", "ios", "apple", "swiftdata", "concurrency"]
+    }
+  ]
+}

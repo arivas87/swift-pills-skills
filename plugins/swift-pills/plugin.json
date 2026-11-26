@@ -1,0 +1,29 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "swift-pills",
+  "version": "0.2.0",
+  "description": "Skills de Swift, SwiftUI, concurrencia, SwiftData y plataformas Apple basadas en los artículos de Swift Pills.",
+  "author": {
+    "name": "Swift Pills",
+    "url": "https://swiftpills.dev"
+  },
+  "homepage": "https://swiftpills.dev",
+  "repository": "https://github.com/arivas87/swift-pills-skills",
+  "keywords": [
+    "swift",
+    "swiftui",
+    "ios",
+    "apple",
+    "swiftdata",
+    "concurrency"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Swift Pills",
+        "category": "Coding"
+      }
+    }
+  },
+  "license": "MIT"
+}
