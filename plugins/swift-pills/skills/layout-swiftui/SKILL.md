@@ -1,6 +1,6 @@
 ---
 name: layout-swiftui
-description: "Layout adaptativo en SwiftUI para ventanas redimensionables. Cubre por qué no decidir por dispositivo, idiom, orientación o size class; ViewThatFits; onGeometryChange con umbrales semánticos; AnyLayout; containerRelativeFrame (count, span y spacing); fixedSize y el tamaño ideal; guías de alineación y AlignmentID personalizados; esquinas concéntricas (ConcentricRectangle frente a ContainerRelativeShape); márgenes del sistema con ContentMarginGuide (iOS 27.1); detectar el final de un ScrollView con onScrollGeometryChange; y ContentBuilder frente a ViewBuilder en Xcode 27. Úsala al construir interfaces que se adapten a iPad, iPhone Mirroring o apps de iPhone redimensionables, o al sustituir GeometryReader, UIScreen.main.bounds, offsets y radios mágicos."
+description: "Layout adaptativo en SwiftUI para ventanas redimensionables. Cubre por qué no decidir por dispositivo, idiom, orientación o size class; ViewThatFits; onGeometryChange con umbrales semánticos; AnyLayout; containerRelativeFrame (count, span y spacing); fixedSize y el tamaño ideal; layoutPriority en HStack, VStack, ZStack, Layout (LayoutSubview.priority) y ViewThatFits; guías de alineación y AlignmentID personalizados; esquinas concéntricas (ConcentricRectangle frente a ContainerRelativeShape); márgenes del sistema con ContentMarginGuide (iOS 27.1); detectar el final de un ScrollView con onScrollGeometryChange; y ContentBuilder frente a ViewBuilder en Xcode 27. Úsala al construir interfaces que se adapten a iPad, iPhone Mirroring o apps de iPhone redimensionables, o al sustituir GeometryReader, UIScreen.main.bounds, offsets y radios mágicos."
 metadata:
   fuentes:
     - https://www.swiftpills.dev/posts/esquinas-concentricas-en-swiftui/
@@ -13,7 +13,8 @@ metadata:
     - https://www.swiftpills.dev/posts/fixedsize-swiftui-tamano-ideal-layout/
     - https://www.swiftpills.dev/posts/contentbuilder-swiftui-un-solo-builder-para-distintos-contenidos/
     - https://www.swiftpills.dev/posts/contentbuilder-swiftui-xcode-27/
-  actualizada: 2026-11-25
+    - https://www.swiftpills.dev/posts/layout-priority-contenedores-swiftui/
+  actualizada: 2026-11-27
 ---
 
 # Layout en SwiftUI
@@ -81,6 +82,36 @@ Sustituye a `.frame(width: UIScreen.main.bounds.width - 40)`. No es lo mismo que
 - `Text("...").fixedSize(horizontal: false, vertical: true)` evita truncar en vertical respetando el ancho.
 - El tamaño ideal de las formas y los colores es 10×10. Defínelo con `.frame(idealWidth:idealHeight:)` antes de `fixedSize()`.
 - Puede dejar sin espacio a sus hermanos. Úsalo con cuidado con Dynamic Type y en ventanas estrechas.
+
+## layoutPriority depende del contenedor
+
+La prioridad por defecto es `0` y solo se compara entre hermanos directos del mismo contenedor. Cada contenedor la interpreta a su manera:
+
+- **`HStack` / `VStack`**: reparte el eje principal. Reserva primero el mínimo de las vistas de menor prioridad (y el `spacing`) y ofrece el resto al grupo de mayor prioridad; lo que este no usa pasa al siguiente grupo. Sirve para decidir qué se trunca antes, no para garantizar que algo no se trunque: si el espacio no llega para la vista prioritaria, también se corta.
+- **`ZStack`**: las vistas del grupo de mayor prioridad deciden el tamaño del stack, que luego se propone al resto. Sin prioridades, todas miden, y una forma o un color flexibles se expanden a toda la propuesta.
+- **`Layout` personalizado**: solo influye si lees `subview.priority` en `sizeThatFits` y `placeSubviews`.
+- **`ViewThatFits`**: la ignora. Elige la primera alternativa, en orden de declaración, cuyo tamaño ideal cabe en los ejes indicados. Para cambiar cuándo salta la variante compacta, reordena o ajusta las alternativas.
+
+```swift
+HStack(spacing: 6) {
+    Text(product.name).lineLimit(1)              // se trunca primero
+    Spacer(minLength: 0)
+    VStack(alignment: .trailing) {               // la prioridad va en el hijo directo del HStack
+        Text(product.price, format: .currency(code: "EUR"))
+        Text("IVA incl.").font(.caption2)
+    }
+    .layoutPriority(1)
+}
+
+ZStack {
+    RoundedRectangle(cornerRadius: 8).fill(.orange.opacity(0.2))   // se adapta
+    Text("Oferta").padding(8).layoutPriority(1)                    // marca el tamaño
+}
+```
+
+- Si la prioridad no surte efecto, comprueba que está en el hijo directo del contenedor que reparte el espacio, no en una vista anidada.
+- Para que un fondo siga el tamaño de su contenido, `.background(_:in:)` es más directo que un `ZStack` con prioridades. Añadir `layoutPriority` no cambia el orden de dibujado.
+- Si lo esencial no cabe con Dynamic Type grande, ofrece una variante vertical con `ViewThatFits` en lugar de subir prioridades.
 
 ## Guías de alineación
 

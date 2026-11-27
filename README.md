@@ -81,7 +81,7 @@ $skill-installer install https://github.com/arivas87/swift-pills-skills/tree/mai
 
 ## Skills disponibles
 
-21 skills generadas a partir de 170 artículos. Los artículos que alimentan cada skill aparecen en `metadata.fuentes`, en el frontmatter de su `SKILL.md`.
+21 skills generadas a partir de 171 artículos. Los artículos que alimentan cada skill aparecen en `metadata.fuentes`, en el frontmatter de su `SKILL.md`.
 
 | Skill | Qué cubre | Artículos |
 |---|---|---:|
@@ -95,7 +95,7 @@ $skill-installer install https://github.com/arivas87/swift-pills-skills/tree/mai
 | `foundation-models` | IA en apps Apple con el framework Foundation Models. | 7 |
 | `integraciones-sistema-ios` | Integraciones de una app con el sistema en iOS y watchOS. | 8 |
 | `iphone-duo` | Preparar apps para iPhone Duo, el iPhone plegable, con iOS 27.1. | 7 |
-| `layout-swiftui` | Layout adaptativo en SwiftUI para ventanas redimensionables. | 10 |
+| `layout-swiftui` | Layout adaptativo en SwiftUI para ventanas redimensionables. | 11 |
 | `lenguaje-swift` | Fundamentos y novedades del lenguaje Swift hasta Swift 6.4. | 20 |
 | `memoria-swift` | Gestión de memoria en Swift con ARC. | 6 |
 | `migracion-ios-27` | Preparar una app para el SDK de iOS 27 y Xcode 27. | 4 |
